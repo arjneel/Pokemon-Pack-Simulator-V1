@@ -17,15 +17,13 @@ in the app as a custom username which saves to a file, resign in to save new inf
 
 # Installation
 
-1. Download the files
+1. Download the files folder
 
-2. Put all files in a code folder
+2. Upload folder to your code editor
 
-3. Upload folder to your code editor
+3. Create the virtual environment (venv) folder with requirements.txt
 
-4. Create the virtual environment (venv) folder with requirements.txt
-
-5. Run with 'flask --app final-project.py run'
+4. Run with 'flask --app final-project.py run'
 
 # Features
 
