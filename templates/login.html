@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        .background {
+        background-image: url("{{ url_for('static', filename='images/logsign.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        padding: 18px;
+        margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="background">
+    <div style="display: flex; justify-content: center; margin-top: 20px">
+        <h1>Log In To An Existing User</h1>
+    </div>
+    <form method="POST" action="/login/{{ card }}/{{ money }}">
+        <label style='color: white' for="name">Username:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div style="display: flex; justify-content: center">
+        <button style='margin-right: 10px' onclick="window.location.href=`http://127.0.0.1:5000/login/{{ card }}/{{ money }}`">To Signup Page</button>
+        <button style='margin-left: 10px' onclick="window.location.href=`http://127.0.0.1:5000/{{ card }}/{{ money }}`">Back To Packs</button>
+    </div>
+</div>
+</body>
+</html>

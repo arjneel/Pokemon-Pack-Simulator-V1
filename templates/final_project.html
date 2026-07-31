@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        .text {
+        text-align: center;
+            padding-top: 20px;
+        }
+        #image {
+            display: block;
+            margin: 0 auto;
+            height: auto;
+            margin-top: 75px;
+            width: 300px;
+            height: 425px;
+            margin-bottom: 65px;
+        }
+        .button {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .background {
+        background-image: url("{{ url_for('static', filename='images/back.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        }
+        .left-side {
+          text-align: left;
+        }
+        .center-side {
+          text-align: center;
+          margin-left: 679px;
+          margin-right: 686px;
+        }
+
+        .right-side {
+          text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="background">
+    <div style="padding-top: 25px">
+        <button onclick="window.location.href=`http://127.0.0.1:5000/signup/${transfer_info[0]}/${transfer_info[1]}`">Login/Signup/Save</button>
+        <h1 style="display: inline; margin-left: 300px" class="text" >Pokemon Pack Battling Simulator</h1>
+    </div>
+    <div>
+        <h2 id='money' class="text">Money: ${{"%.2f"|format(money | float)}}</h2>
+    </div>
+    <div>
+        <img id='image' class="packimage" src="{{ url_for('static', filename='../static/images/empty-transparent.png')}}">
+    </div>
+    <div class="button">
+        <button onclick="new_pack()">New Pack</button>
+        <button onclick="prev_card()">Prev Card</button>
+        <button onclick="next_card()">Next Card</button>
+    </div>
+    <div>
+        <button class="left-side" onclick=battle()></a>Battle</button>
+        <button class="center-side" onclick="open_pack()">Open Pack</button>
+        <button class="right-side" onclick=shop()>Shop</button>
+    </div>
+
+
+<!-starts javascript->
+    <script>
+        // sets global variables including money, rarest card, and the list of every Pokémon card in their rarity category
+        window.pack_open = true
+        window.pack = '../static/images/pack.webp'
+        window.pack_cards = []
+        window.ex_list = [4,8,16,27,31,38,45,48,55,65]
+        window.ir_list = [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95]
+        window.ur_list = [96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113]
+        window.sir_list = [114, 115, 116, 117, 118, 119]
+        window.player_cards = []
+        window.index = 0
+        window.current_rarity = -1
+        window.money = {{ money }}
+        window.transfer_info = [{{ card }}, {{ money }}]
+        // button that takes player to the battle page
+        function battle() {
+            window.location.href=`http://127.0.0.1:5000/battle/${transfer_info[0]}/${transfer_info[1]}`
+        }
+        // checks and returns rarity of current pack card to see if the current pack card is worth more
+        function rarity_check() {
+            if (sir_list.includes(parseInt(player_cards.at(-1)))) {
+                return 4
+            }
+            else if (ur_list.includes(parseInt(player_cards.at(-1)))) {
+                return 3
+            }
+            else if (ir_list.includes(parseInt(player_cards.at(-1)))) {
+                return 2
+            }
+            else if (ex_list.includes(parseInt(player_cards.at(-1)))) {
+                return 1
+            }
+            else if (parseInt(player_cards.at(-1)) === 120) {
+                return 5
+            }
+            else {return 0}
+        }
+        // button that takes player to the shop page
+        function shop() {
+            window.location.href=`http://127.0.0.1:5000/shop/${transfer_info[0]}/${transfer_info[1]}`
+        }
+        // if money is 0 then they cant buy a pack, subtracts $5.00 when they buy a pack, rolls 50/50 on which pack art to use, shows pack
+        function new_pack() {
+            if (money === 0) {
+            } else {
+                pack_open = false
+                const rand = Math.random() * 10
+                money -= 5.00
+                const money_message = document.getElementById("money");
+                money_message.textContent = `Money: $${money.toFixed(2)}`;
+                const image = document.getElementById("image");
+                if (rand >= 5) {
+                    image.src = '../static/images/pack.jpg'
+                } else {
+                    image.src = "../static/images/pack1.jpg"
+                }
+            }
+        }
+        // generates all 10 cards of the pack by generating 8 common cards at first, then rolling to have a chance to add an ir or sir as the 9th card
+        // for the 10th card, it rolls between 1 and 100 and where it lands corresponds to either a code,common,ex,ur,ir,sir, or mhr card
+        function generate_pack() {
+            index = 0
+            pack_cards = [];
+            while (pack_cards.length < 9) {
+                const rand = Math.round(Math.random() * 84)
+                if (ex_list.includes(rand)) {
+                } else {
+                    pack_cards.push(`${rand}`)
+                    if (pack_cards.length === 8) {
+                        const rand1 = Math.random() * 100
+                        added = false
+                        if (rand1 <= 11.01) {
+                            rand2 = Math.floor(Math.random() * ir_list.length)
+                            item = ir_list[rand2]
+                            pack_cards.push(`${item}`)
+                        }
+                        else if (rand1 > 11.01 && rand1 <= 12.26) {
+                            rand4 = Math.floor(Math.random() * sir_list.length)
+                            item = sir_list[rand4]
+                            pack_cards.push(`${item}`)
+                        }
+                        else if (pack_cards.length === 8) {
+                            const rand = Math.round(Math.random() * 84)
+                            if (ex_list.includes(rand)) {} else {
+                                pack_cards.push(`${rand}`)
+                            }
+                        }
+                        }
+                    }
+                }
+            rand5 = Math.random() * 100
+            if (rand5 <= 0.09) {
+                pack_cards.push(`120`)
+            } else if (rand5 > 0.09 && rand5 <= 1.34) {
+                rand_sir = Math.floor(Math.random() * sir_list.length)
+                item = sir_list[rand_sir]
+                pack_cards.push(`${item}`)
+            } else if (rand5 > 1.34 && rand5 <= 9.64) {
+                rand_ur = Math.floor(Math.random() * ur_list.length)
+                item = ur_list[rand_ur]
+                pack_cards.push(`${item}`)
+            } else if (rand5 > 9.64 && rand5 <= 20.65) {
+                rand_ir = Math.floor(Math.random() * ir_list.length)
+                item = ir_list[rand_ir]
+                pack_cards.push(`${item}`)
+            } else if (rand5 > 20.65 && rand5 <= 41.67) {
+                rand_ex = Math.floor(Math.random() * ex_list.length)
+                item = ex_list[rand_ex]
+                pack_cards.push(`${item}`)
+            } else {
+                while (pack_cards.length === 9) {
+                    const rand_com = Math.round(Math.random() * 84)
+                    if (ex_list.includes(rand_com)) {} else {
+                        pack_cards.push(`${rand_com}`)
+                    }
+                }
+            }
+        }
+        // generates the contents of a new pack, shows the first pack card, and adds the card that is shown to the player card list
+        function open_pack() {
+            if (pack_open) {} else {
+                generate_pack()
+                player_cards.push(pack_cards[index])
+                index += 1;
+                const image = document.getElementById("image");
+                numb = 0;
+                image.src = `../static/images/${pack_cards[numb]}.webp`
+                pack_open = true
+            }
+        }
+        // links to a button that show the next card in the pack
+        function next_card() {
+            if (pack_open){
+                const image = document.getElementById("image");
+                if (numb === 9) {} else {
+                    numb += 1;
+                    image.src = `../static/images/${pack_cards[numb]}.webp`
+                    index += 1;
+                    player_cards.push(pack_cards[index])
+                    console.log(player_cards)
+                    if (rarity_check() > current_rarity) {
+                        current_rarity = rarity_check()
+                        transfer_info = [Math.max(player_cards.at(-1)), money]
+                    }
+                }
+            }
+        }
+        // links to a button that show the previous card in the pack
+        function prev_card() {
+            if (pack_open){
+                const image = document.getElementById("image");
+                if (numb === 0) {} else{
+                    numb -= 1;
+                    image.src = `../static/images/${pack_cards[numb]}.webp`
+                }
+            }
+        }
+    </script>
+<!-ends javascript->
+</div>
+</body>
+</html>

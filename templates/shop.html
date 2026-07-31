@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shop Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        .background {
+        background-image: url("{{ url_for('static', filename='images/poke.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        padding: 18px;
+        margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="background">
+    <button onclick='home()'>Back To Packs</button>
+    <h1 style="text-align: center;">The Shop</h1>
+    <h2 id="money">Money: ${{"%.2f"|format(money | float)}}</h2>
+    <div>
+        <h2 style="text-align: center">Your most valuable card:</h2>
+        <h2 id="card_value">Card Value: {{ card_value }}</h2>
+    </div>
+    <div style="padding-bottom: 60px; padding-top: 0px; text-align: center">
+        <img style='width: 300px; height: 400px;' id='card_image' src=''>
+    </div>
+    <div style="text-align: center">
+        <button onclick='sell()'>Sell Card</button>
+    </div>
+</div>
+<!-starts javascript->
+<script>
+    // sets global money, card, and card value (value of rarest card) variables
+    window.money = {{ money | float }}
+    window.card = {{ card | tojson }}
+    window.card_value = {{ card_value | tojson }}
+    // brings the user to the home card site
+    function home() {
+        window.location.href = `http://127.0.0.1:5000/${card}/${money}`
+    }
+    // sets the image card as the player card by linking to the file
+    document.getElementById('card_image').src = '/static/images/' + card + '.webp'
+    // once the sell button is pressed, the card value is added to money and the card is replaced with a code card with a value of $0.00 so they cant keep selling the card over
+    function sell() {
+        card = '0'
+        document.getElementById('card_image').src = '/static/images/0.webp'
+        let card_value_no_dollar = card_value;
+        card_value_no_dollar = card_value_no_dollar.replace("$", "");
+        money += parseFloat(card_value_no_dollar)
+        money = money.toFixed(2)
+        const money_message = document.getElementById("money");
+        money_message.textContent = `Money: $${money}`;
+        const card_message = document.getElementById("card_value");
+        card_message.textContent = `Card Value: $0.00`;
+    }
+</script>
+<!-ends javascript->
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Battle Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        .background {
+        background-image: url("{{ url_for('static', filename='images/battle.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        padding: 18px;
+        margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="background">
+    <button onclick=home()>Back To Packs</button>
+    <h1 style="text-align: center;">Battle Mode</h1>
+    <h2 id="money">Money: ${{"%.2f"|format(money | float)}}</h2>
+    <h2 id="winner">Who wins?</h2>
+    <div style="margin-top: 67px; display: flex; justify-content: space-around; text-align: center;">
+        <h2 style="margin-left: 70px">Your Card:</h2>
+        <h2 style="margin-left: 520px">Your Opponent's Card:</h2>
+    </div>
+    <div style="display: flex; justify-content: space-around; text-align: center;">
+        <h3 style="color: white; margin-left: 70px">Rarity: {{ player_card_rarity }}</h3>
+        <h3 style="color: white; margin-left: 520px">Opponent's Rarity: {{ opp_card_rarity }}</h3>
+    </div>
+    <div style="margin-top:20px; display: flex; justify-content: space-around; text-align: center;">
+        <img style='width: 300px; height: 400px;' id='card_image_player'  src="">
+        <button onclick="battle()">Battle</button>
+        <img style='width: 300px; height: 400px;' id='card_image_opp'  src="">
+    </div>
+<!-starts javascript->
+    <script>
+        // creates global variables and dictionary for the rarity's to be translated battle values
+        window.money = {{ money | float }}
+        window.card = {{ card }}
+        rarity_dict = {
+            'Near Mint' : 0,
+            'Common': 1,
+            'Uncommon': 2,
+            'Rare': 3,
+            'Double Rare': 4,
+            'Illustration Rare': 5,
+            'Ultra Rare': 6,
+            'Special Illustration Rare': 7,
+            'Mega Hyper Rare': 8}
+        window.opp_rarity = rarity_dict['{{opp_card_rarity}}']
+        window.player_rarity = rarity_dict['{{player_card_rarity}}']
+        window.opp_card = {{ opp_card }}
+        window.win = false
+        document.getElementById('card_image_player').src = '/static/images/' + card.toString() + '.webp'
+        document.getElementById('card_image_opp').src = '/static/images/' + opp_card.toString() + '.webp'
+        // returns the player to the home page (card page)
+        function home() {
+            window.location.href=`http://127.0.0.1:5000/${card}/${money}`
+        }
+        // uses the rarity value to see who wins the battle and returns the winner with text
+        function battle() {
+            if (player_rarity === opp_rarity) {
+                const win_message = document.getElementById("winner");
+                win_message.textContent = `It's a tie!`;
+            }
+            else if (player_rarity > opp_rarity && !win) {
+                const win_message = document.getElementById("winner");
+                win_message.textContent = `The Player Wins!`;
+                money += 10.00;
+                win = true;
+                const money_message = document.getElementById("money");
+                money_message.textContent = `Money: $${money.toFixed(2)}`;
+            }
+            else if (player_rarity < opp_rarity && !win) {
+                const win_message = document.getElementById("winner");
+                win_message.textContent = `The Opponent Wins!`;
+                money -= 10.00;
+                win = true;
+                const money_message = document.getElementById("money");
+                money_message.textContent = `Money: $${money.toFixed(2)}`;
+            }
+        }
+    </script>
+</div>
+</body>
+</html>
