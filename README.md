@@ -31,11 +31,11 @@ in the app as a custom username which saves to a file, resign in to save new inf
 
 # Features
 
-Opening Pitch Black Pokemon packs
+Opening Pitch Black Pokemon packs.
 
-Selling cards
+Selling cards.
 
-Battling an opponent
+Battling an opponent.
 
 Saving your data with a log in.
 
