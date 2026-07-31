@@ -8,7 +8,15 @@ in the app as a custom username which saves to a file, resign in to save new inf
 
 # Installation
 
-Check requirements.txt for installation.
+1. Download the files
+
+2. Put all files in a code folder
+
+3. Upload folder to your code editor
+
+4. Create the virtual environment (venv) folder with requirements.txt
+
+5. Run with 'flask --app final-project.py run'
 
 # Features
 
