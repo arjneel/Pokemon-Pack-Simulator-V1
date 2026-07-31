@@ -1,22 +1,4 @@
-requirements.txt
-
-Prerequisites:
-
-	1. Python installed
-	
-	2. A coding app installed
-
-	3. 'pip install Flask pandas' in the app terminal to download flask and pandas
-
-After:
-
-1. Download all files
-
-2. Put files in a folder
-
-3. Upload folder to your code editor
-
-4. Create the virtual environment (venv) folder with: 
+To install the virtual environment, in your coding app with the terminal up:
 
 'cd path/to/your/project' <- required
 
@@ -27,5 +9,3 @@ After:
 or
 
 'source venv/bin/activate' <- for macos/Linux bash/zsh
-
-5. Run 'final-project.py' using the command 'flask --app final-project.py run'
