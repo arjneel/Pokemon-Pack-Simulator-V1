@@ -6,6 +6,15 @@ card agaisnt a random opponent and sell your rarest card for its actual real wor
 "Pitch Black," it features 120 different cards and the simulator generates the packs based on real world probabilities for cards. In addition, you are able to save your progress through signing up
 in the app as a custom username which saves to a file, resign in to save new info, and login to load the info saved.
 
+# Prerequisites
+
+1. Python installed
+
+2. A coding app installed (VSCode/Pycharm)
+
+3. 'pip install Flask pandas' in the app terminal to download flask and pandas
+
+
 # Installation
 
 1. Download the files
